@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html >
+   <head>
+      <meta charset="UTF-8">
+      <title>Real Estate Management System</title>
+      <link rel="stylesheet" type="text/css" th:href="@{/style.css}" />
+      
+       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+      <th:block th:include="/_header"></th:block>
+   </head>
+   
+   <body style="background-image:url('https://media.istockphoto.com/photos/modern-architecture-picture-id187309526?b=1&k=20&m=187309526&s=170667a&w=0&h=7N3550MWE1bcDmkN77cnzD1K4txZYV2d73tfAHKqbIk=');   height: 100%;
+
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;">
+      
+      <th:block th:include="/_menu"></th:block>
+      
+        
+      
+  
+    <div class="container">
+    
+        <h2 style="font-weight: bold;">Property List</h2>
+        
+        <br><br>
+  <!-- nav start  -->
+  		<div class="row">
+  		<div class="col-lg-6 offset-4">
+        <div class="" th:if="${paginationProducts.totalPages > 1}">
+         <th:block th:each="page : ${paginationProducts.navigationPages}">
+         
+            <a th:href="@{|/productList?page=${page}|}" th:if="${page != -1}"
+               class="btn btn-dark" style="border-radius: 0%; margin:2px;" th:utext="${page}"></a>
+               
+            <span class="btn btn-dark" style="border-radius: 0%; margin:2px;" th:if="${page == -1}"> ... </span>
+             
+         </th:block>
+         </div>
+         </div>
+      </div> <!-- nav end -->
+    </div><!-- container end -->
+  <div class="container">
+   <input class="form-control" id="myInput" type="text" placeholder="Search..">
+   
+  <br>
+   
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>Property Image</th>
+        <th>Property Description</th>
+        <th>Price</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <div th:each="prodInfo : ${paginationProducts.list}">
+    <tbody id="myTable">
+      <tr>
+        <td><marquee><img th:src="${prodInfo.image}" width="200" height="200"><img th:src="${prodInfo.image1}" width="200" height="200"><img th:src="${prodInfo.image2}" width="200" height="200"></marquee>
+     </td>
+        <td> <p style="font-size:13px;"><span th:utext="${prodInfo.name}"></span><br>
+        
+      </p></td>
+        <td>Rs. <span th:utext="${prodInfo.price}"></span></td>
+        <td> <a th:href="@{|/buyProduct?code=${prodInfo.code}|}" class="btn btn-link" >Buy Property</a> <th:block sec:authorize="hasAuthority('ROLE_MANAGER')">
+               
+                 <a style="color:red;"
+                    th:href="@{|/admin/product?code=${prodInfo.code}|}">Edit Property</a>
+               
+            </th:block></td>
+      </tr>
+
+    </tbody>
+  </div>
+  </table>
+
+ 
+</div>
+
+
+
+
+
+<!-- ------------------------------Offer end---------------------------------- -->
+      
+      
+       
+      <th:block th:include="/_footer"></th:block>
+    <script>
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>   
+   </body>
+</html>
